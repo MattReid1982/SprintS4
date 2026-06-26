@@ -2,7 +2,6 @@ package com.example.airportapi.controller;
 
 import com.example.airportapi.model.Airport;
 import com.example.airportapi.service.AirportService;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

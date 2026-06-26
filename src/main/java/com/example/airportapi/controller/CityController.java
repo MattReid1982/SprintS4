@@ -25,12 +25,12 @@ public class CityController {
     @GetMapping
     public Page<City> getCities(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
+            @RequestParam(defaultValue = "20") int size
     ) {
         return cityService.getAllCities(PageRequest.of(page, size));
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public City getCity(@PathVariable Long id) {
         return cityService.getCity(id);
     }
