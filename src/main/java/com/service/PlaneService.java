@@ -2,6 +2,8 @@ package com.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.model.Plane;
+import com.repo.PlaneRepository;
 import java.util.List;
 import java.util.Optional;
 

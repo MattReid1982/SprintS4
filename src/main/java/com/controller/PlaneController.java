@@ -3,6 +3,8 @@ package com.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.model.Plane;
+import com.service.PlaneService;
 
 import java.util.List;
 
