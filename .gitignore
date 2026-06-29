@@ -3,6 +3,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .kotlin
+SprintS4_Postman_Collection.json
+/src/main/resources/application.properties
+pom.xml
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
