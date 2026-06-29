@@ -20,7 +20,7 @@ public class CityService {
     }
 
 //    Returns a paginated list of cities from the database.
-//    @param pageable Pageable object containing pagination information.
+//    @param pageable object containing pagination information.
 //    @return A Page object containing the requested cities.
     public Page<City> getAllCities(Pageable pageable) {
         return cityRepository.findAll(pageable);
