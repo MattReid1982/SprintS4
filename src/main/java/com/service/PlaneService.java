@@ -18,12 +18,12 @@ public class PlaneService {
 
 
     public Plane getPlaneByID(long ID){
-        Optional<Plane> PlaneOptional = planeRepository.findAllById(ID);
+        Optional<Plane> PlaneOptional = planeRepository.findById(ID);
         return PlaneOptional.orElse(null);
     }
 
     public void deletePlaneByID(long ID){
-        planeRepository.delete(ID);
+        planeRepository.deleteById(ID);
     }
 
     public Plane createPlane(Plane newPlane){
