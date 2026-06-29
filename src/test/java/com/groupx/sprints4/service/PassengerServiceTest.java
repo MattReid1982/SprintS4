@@ -1,8 +1,8 @@
 package com.groupx.sprints4.service;
 
-import com.PassengerService;
 import com.model.Passenger;
 import com.repo.PassengerRepository;
+import com.service.PassengerService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

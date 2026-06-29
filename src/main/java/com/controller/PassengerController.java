@@ -1,7 +1,7 @@
 package com.controller;
 
-import com.PassengerService;
 import com.model.Passenger;
+import com.service.PassengerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

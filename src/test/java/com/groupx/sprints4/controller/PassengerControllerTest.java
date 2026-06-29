@@ -1,8 +1,8 @@
 package com.groupx.sprints4.controller;
 
-import com.PassengerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Passenger;
+import com.service.PassengerService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

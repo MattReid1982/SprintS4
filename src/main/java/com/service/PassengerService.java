@@ -1,4 +1,4 @@
-package com;
+package com.service;
 
 import com.model.Passenger;
 import com.repo.PassengerRepository;
