@@ -1,8 +1,9 @@
 package com.groupx.sprints4.controller;
 
+import com.PassengerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.groupx.sprints4.model.Passenger;
-import com.groupx.sprints4.service.PassengerService;
+import com.model.Passenger;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

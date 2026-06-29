@@ -1,4 +1,4 @@
-package com.groupx.sprints4.model;
+package com.model;
 
 import jakarta.persistence.*;
 

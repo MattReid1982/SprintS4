@@ -1,7 +1,8 @@
-package com.example.airportapi.service;
+package com.service;
 
-import com.example.airportapi.model.City;
-import com.example.airportapi.repo.CityRepository;
+import com.model.City;
+import com.repo.CityRepository;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,8 @@
-package com.example.airportapi.service;
+package com.service;
 
-import com.example.airportapi.model.Airport;
-import com.example.airportapi.repo.AirportRepository;
+import com.model.Airport;
+import com.repo.AirportRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,8 @@
-package com.example.airportapi.repo;
+package com.repo;
 
-import com.example.airportapi.model.City;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.model.City;
 
 // Repository interface for performing CRUD operations on City entities.
 // Extends JpaRepository to inherit standard CRUD methods.

@@ -1,7 +1,8 @@
-package com.example.airportapi.repo;
+package com.repo;
 
-import com.example.airportapi.model.Airport;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.model.Airport;
 
 import java.util.List;
 

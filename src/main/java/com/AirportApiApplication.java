@@ -1,12 +1,12 @@
-package com.groupx.sprints4;
+package com;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SprintS4Application {
+public class AirportApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SprintS4Application.class, args);
+        SpringApplication.run(AirportApiApplication.class, args);
     }
 }

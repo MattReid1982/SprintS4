@@ -1,7 +1,8 @@
-package com.groupx.sprints4.service;
+package com;
 
-import com.groupx.sprints4.model.Passenger;
-import com.groupx.sprints4.repository.PassengerRepository;
+import com.model.Passenger;
+import com.repo.PassengerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

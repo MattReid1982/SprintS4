@@ -1,7 +1,8 @@
-package com.groupx.sprints4.controller;
+package com.controller;
 
-import com.groupx.sprints4.model.Passenger;
-import com.groupx.sprints4.service.PassengerService;
+import com.PassengerService;
+import com.model.Passenger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

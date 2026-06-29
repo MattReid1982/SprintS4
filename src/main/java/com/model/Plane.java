@@ -1,4 +1,4 @@
-package FrameWork.Rest;
+package com.model;
 
 
 import jakarta.persistence.Entity;

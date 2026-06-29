@@ -1,4 +1,4 @@
-package com.example.airportapi.model;
+package com.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

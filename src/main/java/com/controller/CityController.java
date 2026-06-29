@@ -1,9 +1,10 @@
 package com.example.airportapi.controller;
 
-import com.example.airportapi.model.Airport;
-import com.example.airportapi.model.City;
-import com.example.airportapi.service.AirportService;
-import com.example.airportapi.service.CityService;
+import com.model.Airport;
+import com.model.City;
+import com.service.AirportService;
+import com.service.CityService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;

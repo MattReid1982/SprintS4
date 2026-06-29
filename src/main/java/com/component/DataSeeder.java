@@ -1,7 +1,8 @@
-package com.groupx.sprints4.component;
+package com.component;
 
-import com.groupx.sprints4.model.Passenger;
-import com.groupx.sprints4.repository.PassengerRepository;
+import com.model.Passenger;
+import com.repo.PassengerRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
