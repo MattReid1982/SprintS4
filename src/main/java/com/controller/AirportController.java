@@ -1,4 +1,4 @@
-package com.example.airportapi.controller;
+package com.controller;
 
 import com.model.Airport;
 import com.service.AirportService;
