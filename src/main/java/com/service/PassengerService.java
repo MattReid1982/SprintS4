@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +32,10 @@ public class PassengerService {
 
     public List<Passenger> getAllPassengers() {
         return passengerRepository.findAll();
+    }
+
+    public Page<Passenger> getAllPassengers(Pageable pageable) {
+        return passengerRepository.findAll(pageable);
     }
 
     public Optional<Passenger> getPassengerById(Long id) {
