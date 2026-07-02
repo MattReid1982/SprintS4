@@ -2,6 +2,7 @@ package com.service;
 
 import com.model.Airport;
 import com.model.Passenger;
+import com.model.Plane;
 import com.repo.PassengerRepository;
 import com.repo.PlaneRepository;
 

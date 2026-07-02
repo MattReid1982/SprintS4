@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PlaneRepository extends JpaRepository<Plane, Long> {
-    List<Plane> findByPassengersId(Long passengerId);
+  List<Plane> findByPassengersId(Long passengerId);
 }
