@@ -1,15 +1,10 @@
 package com.model;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-public class Plane{
+public class Plane {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +13,21 @@ public class Plane{
     private String airlineName;
     private int numOfPassengers;
 
+    @ManyToMany
+    @JoinTable(
+        name = "plane_airport",
+        joinColumns = @JoinColumn(name = "plane_id"),
+        inverseJoinColumns = @JoinColumn(name = "airport_id")
+    )
+    private List<Airport> airports;
 
-    //@ManyToMany
-    //private AirPort aiport
-
-    //@ManyToMany
-    //private Passengers passengers
+    @ManyToMany
+    @JoinTable(
+        name = "plane_passenger",
+        joinColumns = @JoinColumn(name = "plane_id"),
+        inverseJoinColumns = @JoinColumn(name = "passenger_id")
+    )
+    private List<Passenger> passengers;
 
 
     public long getID() {
@@ -56,5 +60,21 @@ public class Plane{
 
     public void setNumOfPassengers(int numOfPassengers) {
         this.numOfPassengers = numOfPassengers;
+    }
+
+    public List<Airport> getAirports() {
+        return airports;
+    }
+
+    public void setAirports(List<Airport> airports) {
+        this.airports = airports;
+    }
+
+    public List<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<Passenger> passengers) {
+        this.passengers = passengers;
     }
 }

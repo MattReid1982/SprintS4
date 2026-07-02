@@ -6,7 +6,8 @@ import com.service.AirportService;
 import com.service.CityService;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +35,9 @@ public class CityController {
 
     @GetMapping
     public Page<City> getCities(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @PageableDefault(page = 0, size = 20) Pageable pageable
     ) {
-        return cityService.getAllCities(PageRequest.of(page, size));
+        return cityService.getAllCities(pageable);
     }
 
     // Returns a paginated list of all cities

@@ -59,7 +59,6 @@ public class City {
 
 //    Returns the province for the city.
     public String getProvince() {
-        this.province = province;
         return province;
     }
 
