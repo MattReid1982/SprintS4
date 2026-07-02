@@ -51,6 +51,10 @@ public class Airport {
         return airportCode;
     }
 
+    public City getCity() {
+        return city;
+    }
+
 //    Returns the city associated with the airport.
     public void setId(Long id) {
         this.id = id;
@@ -59,6 +63,10 @@ public class Airport {
 //    Sets the code of the airport.
     public void setAirportCode(String airportCode) {
         this.airportCode = airportCode;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 //    Sets the name of the airport.

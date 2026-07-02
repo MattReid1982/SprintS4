@@ -2,12 +2,15 @@ package com.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.model.Airport;
 import com.model.Plane;
 import com.repo.PlaneRepository;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class PlaneService {
     @Autowired
     private PlaneRepository planeRepository;
@@ -26,8 +29,22 @@ public class PlaneService {
         planeRepository.deleteById(ID);
     }
 
+    @Transactional(readOnly = false)
     public Plane createPlane(Plane newPlane){
         return planeRepository.save(newPlane);
+    }
+
+    public List<Plane> getPlanesByPassengerId(Long passengerId) {
+        return planeRepository.findByPassengersId(passengerId);
+    }
+
+    public List<Airport> getAirportsForPlane(long ID) {
+        Plane plane = getPlaneByID(ID);
+        if (plane == null) {
+            return List.of();
+        }
+        plane.getAirports().size();
+        return plane.getAirports();
     }
 
     public Plane updatePlane(long ID, Plane updatedPlane){

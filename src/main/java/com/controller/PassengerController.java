@@ -1,6 +1,8 @@
 package com.controller;
 
+import com.model.Airport;
 import com.model.Passenger;
+import com.model.Plane;
 import com.service.PassengerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +52,15 @@ public class PassengerController {
     public ResponseEntity<Void> deletePassenger(@PathVariable Long id) {
         passengerService.deletePassenger(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/planes")
+    public List<Plane> getPlanesForPassenger(@PathVariable Long id) {
+        return passengerService.getPlanesForPassenger(id);
+    }
+
+    @GetMapping("/{id}/airports")
+    public List<Airport> getAirportsForPassenger(@PathVariable Long id) {
+        return passengerService.getAirportsUsedByPassenger(id);
     }
 }

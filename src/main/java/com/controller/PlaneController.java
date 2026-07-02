@@ -3,6 +3,7 @@ package com.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.model.Airport;
 import com.model.Plane;
 import com.service.PlaneService;
 
@@ -40,5 +41,10 @@ public class PlaneController {
     @DeleteMapping("/planes/{ID}")
     public void deletePlaneByID(@PathVariable Long ID) {
         planeService.deletePlaneByID(ID);
+    }
+
+    @GetMapping("/planes/{ID}/airports")
+    public List<Airport> getAirportsForPlane(@PathVariable long ID) {
+        return planeService.getAirportsForPlane(ID);
     }
 }
