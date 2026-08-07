@@ -12,82 +12,94 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing city endpoints.
+ */
 @RestController
 @RequestMapping("/cities")
 public class CityController {
 
-//  Service used to perform City CRUD operations
+    /** Service layer dependency for city business logic. */
     private final CityService cityService;
 
-//  Service used to perform Airport CRUD operations
+    /** Service layer dependency for airport queries related to cities. */
     private final AirportService airportService;
 
-//  Constructor for CityController that initializes the cityService and airportService fields
+    /**
+     * Constructs a CityController with required dependencies.
+     *
+     * @param cityService    city service
+     * @param airportService airport service
+     */
     public CityController(CityService cityService, AirportService airportService) {
         this.cityService = cityService;
         this.airportService = airportService;
     }
 
-    //  Endpoint to retrieve a paginated list of cities. Accepts optional query parameters for page number and page size.
-//    @param page Page number (starts at 0)
-//    @param size Number of cities per page
-//    @return A Page object containing the requested cities
-
+    /**
+     * GET /cities : Retrieves a paginated list of cities.
+     *
+     * @param pageable pagination parameters (defaults to page 0, size 20)
+     * @return a {@link Page} containing the requested cities
+     */
     @GetMapping
-    public Page<City> getCities(
-            @PageableDefault(page = 0, size = 20) Pageable pageable
-    ) {
+    public Page<City> getCities(@PageableDefault(page = 0, size = 20) Pageable pageable) {
         return cityService.getAllCities(pageable);
     }
 
-    // Returns a paginated list of all cities
-//    @param id City ID to get
-//    @return The City object with the specified ID
-
+    /**
+     * GET /cities/{id} : Returns a single city by ID.
+     *
+     * @param id city ID
+     * @return matching city
+     */
     @GetMapping("/{id}")
     public City getCity(@PathVariable Long id) {
         return cityService.getCity(id);
     }
 
-//  Creates a new city using the provided City object in the request body
-//    @param city City information recieved from the request body
-//    @return the newly created city
-
+    /**
+     * POST /cities : Creates a new city.
+     *
+     * @param city city payload
+     * @return newly created city
+     */
     @PostMapping
     public City createCity(@RequestBody City city) {
         return cityService.saveCity(city);
     }
 
-//  Updates an existing city with the specified ID using the provided City object in the request body
-//    @param id City ID to update
-//    @param city Updated city information recieved from the request body
-//    @return the updated city
-
+    /**
+     * PUT /cities/{id} : Updates an existing city.
+     *
+     * @param id   city ID
+     * @param city updated city payload
+     * @return updated city
+     */
     @PutMapping("/{id}")
-    public City updateCity(
-            @PathVariable Long id,
-            @RequestBody City city) {
+    public City updateCity(@PathVariable Long id, @RequestBody City city) {
         return cityService.updateCity(id, city);
     }
 
-//  Deletes the city with the specified ID
-//    @param id City ID to delete
+    /**
+     * DELETE /cities/{id} : Deletes a city by ID.
+     *
+     * @param id city ID
+     */
     @DeleteMapping("/{id}")
     public void deleteCity(@PathVariable Long id) {
         cityService.deleteCity(id);
     }
 
-//  Retrieves a list of airports located in the city with the specified ID
-//    @param id City ID to get airports for
-//    @return A list of Airport objects located in the specified city
-//    this endpoint answers the assignment question"
-//    "What airports are in each city?"
-//    @param id City ID to get airports for
-//    @return A list of Airport objects located in the specified city
-
+    /**
+     * GET /cities/{id}/airports : Retrieves all airports located in a specific city.
+     * Answers the query: "What airports are in each city?"
+     *
+     * @param id city ID
+     * @return list of airports in the city
+     */
     @GetMapping("/{id}/airports")
-    public List<Airport> getAirportsInCity(
-            @PathVariable Long id) {
+    public List<Airport> getAirportsInCity(@PathVariable Long id) {
         return airportService.getAirportByCity(id);
     }
 }

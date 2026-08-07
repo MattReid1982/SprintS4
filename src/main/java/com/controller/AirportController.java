@@ -7,56 +7,74 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing airport endpoints.
+ */
 @RestController
 @RequestMapping("/airports")
 public class AirportController {
 
-//    Service used to perform Airport CRUD operations.
+    /** Service layer dependency for airport business logic. */
     private final AirportService airportService;
 
-//    Constructor for AirportController that initializes the airportService field.
+    /**
+     * Constructs an AirportController with the required service dependency.
+     *
+     * @param airportService airport service
+     */
     public AirportController(AirportService airportService) {
         this.airportService = airportService;
     }
 
-//    Returns a list of all airports in the database.
-//    @return A list of Airport objects.
+    /**
+     * GET /airports : Returns a list of all airports.
+     *
+     * @return list of all airports
+     */
     @GetMapping
     public List<Airport> getAllAirports() {
         return airportService.getAllAirports();
     }
 
-//    Returns a single airport using its ID.
-//    @param id The ID of the airport to retrieve.
-//    @return The Airport object with the specified ID.
+    /**
+     * GET /airports/{id} : Returns a single airport by ID.
+     *
+     * @param id airport ID
+     * @return matching airport
+     */
     @GetMapping("/{id}")
     public Airport getAirport(@PathVariable Long id) {
         return airportService.getAirport(id);
     }
 
-//    Creates a new airport in the database.
-//    @param airport The Airport object to create.
-//    @return The newly created Airport object.
+    /**
+     * POST /airports : Creates a new airport.
+     *
+     * @param airport airport payload
+     * @return newly created airport
+     */
     @PostMapping
-    public Airport createAirport(
-            @RequestBody Airport airport) {
+    public Airport createAirport(@RequestBody Airport airport) {
         return airportService.saveAirport(airport);
     }
 
-//    Updates an existing airport in the database using its ID.
-//    @param id The ID of the airport to update.
-//    @param airport The Airport object containing the updated information.
-//    @return The updated Airport object.
+    /**
+     * PUT /airports/{id} : Updates an existing airport.
+     *
+     * @param id      airport ID
+     * @param airport updated airport payload
+     * @return updated airport
+     */
     @PutMapping("/{id}")
-    public Airport updateAirport(
-            @PathVariable Long id,
-            @RequestBody Airport airport) {
+    public Airport updateAirport(@PathVariable Long id, @RequestBody Airport airport) {
         return airportService.updateAirport(id, airport);
     }
 
-
-//    Deletes an airport from the database using its ID.
-//    @param id The ID of the airport to delete.
+    /**
+     * DELETE /airports/{id} : Deletes an airport by ID.
+     *
+     * @param id airport ID
+     */
     @DeleteMapping("/{id}")
     public void deleteAirport(@PathVariable Long id) {
         airportService.deleteAirport(id);

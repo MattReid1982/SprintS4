@@ -13,16 +13,35 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
+import java.util.List;
 
+/**
+ * Component that seeds initial data into the database upon application startup.
+ * Populates sample cities, airports, passengers, and planes.
+ */
 @Component
 public class DataSeeder implements CommandLineRunner {
 
+    /** Repository for city persistence. */
     private final CityRepository cityRepository;
+
+    /** Repository for airport persistence. */
     private final AirportRepository airportRepository;
+
+    /** Repository for passenger persistence. */
     private final PassengerRepository passengerRepository;
+
+    /** Repository for plane persistence. */
     private final PlaneRepository planeRepository;
 
+    /**
+     * Constructs a DataSeeder component with required repositories.
+     *
+     * @param cityRepository      city repository
+     * @param airportRepository   airport repository
+     * @param passengerRepository passenger repository
+     * @param planeRepository     plane repository
+     */
     public DataSeeder(CityRepository cityRepository,
                       AirportRepository airportRepository,
                       PassengerRepository passengerRepository,
@@ -33,8 +52,15 @@ public class DataSeeder implements CommandLineRunner {
         this.planeRepository = planeRepository;
     }
 
+    /**
+     * Runs the data seeding process if no planes currently exist in the database.
+     *
+     * @param args command line arguments
+     * @throws Exception if an error occurs during seeding
+     */
     @Override
     @Transactional
+    @SuppressWarnings("null")
     public void run(String... args) throws Exception {
         if (planeRepository.count() == 0) {
             // Delete existing data to start clean and match the seed pattern
@@ -48,7 +74,7 @@ public class DataSeeder implements CommandLineRunner {
             City vancouver = cityRepository.save(new City("Vancouver", "British Columbia", 2300000));
             City calgary = cityRepository.save(new City("Calgary", "Alberta", 1400000));
             City montreal = cityRepository.save(new City("Montreal", "Quebec", 1800000));
-            City stJohns = cityRepository.save(new City("St. John's", "Newfoundland", 110000));
+            cityRepository.save(new City("St. John's", "Newfoundland", 110000));
 
             // 2. Create Airports and associate with Cities
             Airport yyz = new Airport("Toronto Pearson International Airport", "YYZ");
@@ -62,7 +88,7 @@ public class DataSeeder implements CommandLineRunner {
             Airport yul = new Airport("Montreal-Trudeau International Airport", "YUL");
             yul.setCity(montreal);
 
-            airportRepository.saveAll(Arrays.asList(yyz, ytz, yvr, yyc, yul));
+            airportRepository.saveAll(List.of(yyz, ytz, yvr, yyc, yul));
 
             // 3. Create Passengers
             Passenger alice = passengerRepository.save(new Passenger("Alice", "Nguyen", "555-0101"));
@@ -72,31 +98,31 @@ public class DataSeeder implements CommandLineRunner {
             Passenger john = passengerRepository.save(new Passenger("John", "Doe", "555-1234"));
             Passenger jane = passengerRepository.save(new Passenger("Jane", "Smith", "555-5678"));
             Passenger bob = passengerRepository.save(new Passenger("Bob", "Johnson", "555-9012"));
-            Passenger keith = passengerRepository.save(new Passenger("Keith", "Bishop", "7097865464"));
+            passengerRepository.save(new Passenger("Keith", "Bishop", "7097865464"));
 
             // 4. Create Planes and associate with Airports and Passengers
             Plane plane1 = new Plane();
             plane1.setType("Boeing 737");
             plane1.setAirlineName("Air Canada");
             plane1.setNumOfPassengers(160);
-            plane1.setAirports(Arrays.asList(yyz, yvr));
-            plane1.setPassengers(Arrays.asList(alice, brandon, john));
+            plane1.setAirports(List.of(yyz, yvr));
+            plane1.setPassengers(List.of(alice, brandon, john));
 
             Plane plane2 = new Plane();
             plane2.setType("Airbus A320");
             plane2.setAirlineName("WestJet");
             plane2.setNumOfPassengers(150);
-            plane2.setAirports(Arrays.asList(ytz, yyc));
-            plane2.setPassengers(Arrays.asList(carla, bob, john));
+            plane2.setAirports(List.of(ytz, yyc));
+            plane2.setPassengers(List.of(carla, bob, john));
 
             Plane plane3 = new Plane();
             plane3.setType("Boeing 777");
             plane3.setAirlineName("Air Transat");
             plane3.setNumOfPassengers(300);
-            plane3.setAirports(Arrays.asList(yyz, yyc, yul));
-            plane3.setPassengers(Arrays.asList(alice, david, jane));
+            plane3.setAirports(List.of(yyz, yyc, yul));
+            plane3.setPassengers(List.of(alice, david, jane));
 
-            planeRepository.saveAll(Arrays.asList(plane1, plane2, plane3));
+            planeRepository.saveAll(List.of(plane1, plane2, plane3));
 
             System.out.println("Passenger, City, Airport, and Plane data seeded successfully!");
         }
