@@ -4,10 +4,12 @@ import com.model.Airport;
 import com.model.City;
 import com.model.Passenger;
 import com.model.Plane;
+import com.model.User;
 import com.repo.AirportRepository;
 import com.repo.CityRepository;
 import com.repo.PassengerRepository;
 import com.repo.PlaneRepository;
+import com.repo.UserRepository;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,7 +19,7 @@ import java.util.List;
 
 /**
  * Component that seeds initial data into the database upon application startup.
- * Populates sample cities, airports, passengers, and planes.
+ * Populates sample cities, airports, passengers, planes, and default users.
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -34,6 +36,9 @@ public class DataSeeder implements CommandLineRunner {
     /** Repository for plane persistence. */
     private final PlaneRepository planeRepository;
 
+    /** Repository for user persistence. */
+    private final UserRepository userRepository;
+
     /**
      * Constructs a DataSeeder component with required repositories.
      *
@@ -41,15 +46,18 @@ public class DataSeeder implements CommandLineRunner {
      * @param airportRepository   airport repository
      * @param passengerRepository passenger repository
      * @param planeRepository     plane repository
+     * @param userRepository      user repository
      */
     public DataSeeder(CityRepository cityRepository,
                       AirportRepository airportRepository,
                       PassengerRepository passengerRepository,
-                      PlaneRepository planeRepository) {
+                      PlaneRepository planeRepository,
+                      UserRepository userRepository) {
         this.cityRepository = cityRepository;
         this.airportRepository = airportRepository;
         this.passengerRepository = passengerRepository;
         this.planeRepository = planeRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -62,6 +70,11 @@ public class DataSeeder implements CommandLineRunner {
     @Transactional
     @SuppressWarnings("null")
     public void run(String... args) throws Exception {
+        if (userRepository.count() == 0) {
+            userRepository.save(new User("admin", "password123", "admin@airport.com"));
+            System.out.println("Default admin user seeded successfully!");
+        }
+
         if (planeRepository.count() == 0) {
             // Delete existing data to start clean and match the seed pattern
             planeRepository.deleteAll();
