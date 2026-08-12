@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents an airport entity in the database.
  * Each airport belongs to one city.
@@ -31,6 +34,13 @@ public class Airport {
     @JoinColumn(name = "city_id")
     @JsonBackReference
     private City city;
+
+    /**
+     * One-to-many relationship mapping gates at this airport.
+     */
+    @OneToMany(mappedBy = "airport", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("airport")
+    private List<Gate> gates = new ArrayList<>();
 
     /**
      * Default constructor for JPA.
@@ -119,5 +129,23 @@ public class Airport {
      */
     public void setCity(City city) {
         this.city = city;
+    }
+
+    /**
+     * Gets the list of gates at this airport.
+     *
+     * @return list of gates
+     */
+    public List<Gate> getGates() {
+        return gates;
+    }
+
+    /**
+     * Sets the list of gates at this airport.
+     *
+     * @param gates list of gates
+     */
+    public void setGates(List<Gate> gates) {
+        this.gates = gates;
     }
 }
