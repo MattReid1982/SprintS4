@@ -1,7 +1,9 @@
 package com.controller;
 
 import com.model.Airport;
+import com.model.Gate;
 import com.service.AirportService;
+import com.service.GateService;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -11,19 +13,25 @@ import java.util.List;
  * REST controller for managing airport endpoints.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api/airports")
 public class AirportController {
 
     /** Service layer dependency for airport business logic. */
     private final AirportService airportService;
 
+    /** Service layer dependency for gate business logic. */
+    private final GateService gateService;
+
     /**
-     * Constructs an AirportController with the required service dependency.
+     * Constructs an AirportController with required service dependencies.
      *
      * @param airportService airport service
+     * @param gateService    gate service
      */
-    public AirportController(AirportService airportService) {
+    public AirportController(AirportService airportService, GateService gateService) {
         this.airportService = airportService;
+        this.gateService = gateService;
     }
 
     /**
@@ -78,5 +86,16 @@ public class AirportController {
     @DeleteMapping("/{id}")
     public void deleteAirport(@PathVariable Long id) {
         airportService.deleteAirport(id);
+    }
+
+    /**
+     * GET /airports/{id}/gates : Returns all gates for a specific airport.
+     *
+     * @param id airport ID
+     * @return list of gates for the airport
+     */
+    @GetMapping("/{id}/gates")
+    public List<Gate> getGatesForAirport(@PathVariable Long id) {
+        return gateService.getGatesByAirport(id);
     }
 }

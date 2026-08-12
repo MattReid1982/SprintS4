@@ -2,11 +2,13 @@ package com.component;
 
 import com.model.Airport;
 import com.model.City;
+import com.model.Gate;
 import com.model.Passenger;
 import com.model.Plane;
 import com.model.User;
 import com.repo.AirportRepository;
 import com.repo.CityRepository;
+import com.repo.GateRepository;
 import com.repo.PassengerRepository;
 import com.repo.PlaneRepository;
 import com.repo.UserRepository;
@@ -19,7 +21,7 @@ import java.util.List;
 
 /**
  * Component that seeds initial data into the database upon application startup.
- * Populates sample cities, airports, passengers, planes, and default users.
+ * Populates sample cities, airports, gates, passengers, planes, and default users.
  */
 @Component
 public class DataSeeder implements CommandLineRunner {
@@ -29,6 +31,9 @@ public class DataSeeder implements CommandLineRunner {
 
     /** Repository for airport persistence. */
     private final AirportRepository airportRepository;
+
+    /** Repository for gate persistence. */
+    private final GateRepository gateRepository;
 
     /** Repository for passenger persistence. */
     private final PassengerRepository passengerRepository;
@@ -44,17 +49,20 @@ public class DataSeeder implements CommandLineRunner {
      *
      * @param cityRepository      city repository
      * @param airportRepository   airport repository
+     * @param gateRepository      gate repository
      * @param passengerRepository passenger repository
      * @param planeRepository     plane repository
      * @param userRepository      user repository
      */
     public DataSeeder(CityRepository cityRepository,
                       AirportRepository airportRepository,
+                      GateRepository gateRepository,
                       PassengerRepository passengerRepository,
                       PlaneRepository planeRepository,
                       UserRepository userRepository) {
         this.cityRepository = cityRepository;
         this.airportRepository = airportRepository;
+        this.gateRepository = gateRepository;
         this.passengerRepository = passengerRepository;
         this.planeRepository = planeRepository;
         this.userRepository = userRepository;
@@ -79,6 +87,7 @@ public class DataSeeder implements CommandLineRunner {
             // Delete existing data to start clean and match the seed pattern
             planeRepository.deleteAll();
             passengerRepository.deleteAll();
+            gateRepository.deleteAll();
             airportRepository.deleteAll();
             cityRepository.deleteAll();
 
@@ -102,6 +111,14 @@ public class DataSeeder implements CommandLineRunner {
             yul.setCity(montreal);
 
             airportRepository.saveAll(List.of(yyz, ytz, yvr, yyc, yul));
+
+            // 3. Create Gates associated with Airports
+            Gate g1 = new Gate("A1", "Terminal 1", yyz);
+            Gate g2 = new Gate("A2", "Terminal 1", yyz);
+            Gate g3 = new Gate("B1", "Terminal 2", yvr);
+            Gate g4 = new Gate("B2", "Terminal 2", yvr);
+            Gate g5 = new Gate("C1", "International Concourse", yyc);
+            gateRepository.saveAll(List.of(g1, g2, g3, g4, g5));
 
             // 3. Create Passengers
             Passenger alice = passengerRepository.save(new Passenger("Alice", "Nguyen", "555-0101"));
@@ -137,7 +154,7 @@ public class DataSeeder implements CommandLineRunner {
 
             planeRepository.saveAll(List.of(plane1, plane2, plane3));
 
-            System.out.println("Passenger, City, Airport, and Plane data seeded successfully!");
+            System.out.println("Passenger, City, Airport, Gate, and Plane data seeded successfully!");
         }
     }
 }
