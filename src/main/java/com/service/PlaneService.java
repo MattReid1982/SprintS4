@@ -105,7 +105,6 @@ public class PlaneService {
         if (planeToUpdateOptional.isPresent()) {
             Plane planeToUpdate = planeToUpdateOptional.get();
 
-            planeToUpdate.setID((int) updatedPlane.getID());
             planeToUpdate.setAirlineName(updatedPlane.getAirlineName());
             planeToUpdate.setType(updatedPlane.getType());
             planeToUpdate.setNumOfPassengers(updatedPlane.getNumOfPassengers());

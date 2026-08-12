@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import com.model.Airport;
 import com.repo.AirportRepository;
 
@@ -7,85 +8,80 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Service class for managing {@link Airport} entities.
- * Provides business logic for CRUD operations and city-based queries.
- */
 @Service
 public class AirportService {
 
-    /** Repository used to perform Airport database operations. */
     private final AirportRepository airportRepository;
 
-    /**
-     * Constructs an AirportService with the required AirportRepository dependency.
-     *
-     * @param airportRepository repository for airport persistence
-     */
     public AirportService(AirportRepository airportRepository) {
         this.airportRepository = airportRepository;
     }
 
     /**
-     * Retrieves all airports stored in the database.
-     *
-     * @return list of all {@link Airport} entities
+     * Retrieves all airports.
      */
     public List<Airport> getAllAirports() {
         return airportRepository.findAll();
     }
 
     /**
-     * Retrieves a single airport by its unique ID.
-     *
-     * @param id airport ID
-     * @return the matching {@link Airport}
-     * @throws RuntimeException if no airport is found with the specified ID
+     * Retrieves one airport by ID.
      */
-    @SuppressWarnings("null")
     public Airport getAirport(Long id) {
-        return airportRepository.findById(id).orElseThrow(() -> new RuntimeException("Airport not found"));
+        return airportRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Airport not found with id: " + id
+                        )
+                );
     }
 
     /**
-     * Creates and saves a new airport entity in the database.
-     *
-     * @param airport the airport to create
-     * @return the newly saved {@link Airport}
+     * Creates a new airport.
      */
-    @SuppressWarnings("null")
     public Airport saveAirport(Airport airport) {
         return airportRepository.save(airport);
     }
 
     /**
-     * Updates an existing airport entity using its ID.
-     *
-     * @param id      airport ID to update
-     * @param airport airport object containing updated details
-     * @return the updated {@link Airport}
+     * Updates an existing airport.
      */
-    @SuppressWarnings("null")
     public Airport updateAirport(Long id, Airport airport) {
-        airport.setId(id);
-        return airportRepository.save(airport);
+
+        // Make sure the airport actually exists
+        Airport existingAirport = airportRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Airport not found with id: " + id
+                        )
+                );
+
+        existingAirport.setName(airport.getName());
+        existingAirport.setAirportCode(airport.getAirportCode());
+
+        if (airport.getCity() != null) {
+            existingAirport.setCity(airport.getCity());
+        }
+
+        return airportRepository.save(existingAirport);
     }
 
     /**
-     * Deletes an airport from the database by its ID.
-     *
-     * @param id airport ID to delete
+     * Deletes an airport.
      */
-    @SuppressWarnings("null")
     public void deleteAirport(Long id) {
+
+        if (!airportRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "Airport not found with id: " + id
+            );
+        }
+
         airportRepository.deleteById(id);
     }
 
     /**
-     * Retrieves all airports associated with a specific city ID.
-     *
-     * @param cityId ID of the city
-     * @return list of {@link Airport} entities in the specified city
+     * Retrieves airports belonging to a city.
      */
     public List<Airport> getAirportByCity(Long cityId) {
         return airportRepository.findByCityId(cityId);
