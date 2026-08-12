@@ -24,6 +24,12 @@ public class Passenger {
     /** Contact phone number of the passenger. */
     private String phoneNumber;
 
+    /** Email address of the passenger. */
+    private String email;
+
+    /** Passport number of the passenger. */
+    private String passportNumber;
+
     /**
      * Default constructor for JPA.
      */
@@ -113,5 +119,41 @@ public class Passenger {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * Gets the email.
+     *
+     * @return email address
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets the email.
+     *
+     * @param email email address
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Gets the passport number.
+     *
+     * @return passport number
+     */
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    /**
+     * Sets the passport number.
+     *
+     * @param passportNumber passport number
+     */
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
     }
 }
