@@ -11,7 +11,7 @@ import java.util.List;
  * REST controller for managing airport endpoints.
  */
 @RestController
-@RequestMapping("/airports")
+@RequestMapping("/api/airports")
 public class AirportController {
 
     /** Service layer dependency for airport business logic. */

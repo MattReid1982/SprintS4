@@ -16,7 +16,7 @@ import java.util.List;
  * REST controller for managing city endpoints.
  */
 @RestController
-@RequestMapping("/cities")
+@RequestMapping("/api/cities")
 public class CityController {
 
     /** Service layer dependency for city business logic. */
