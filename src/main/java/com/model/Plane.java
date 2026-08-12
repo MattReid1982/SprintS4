@@ -25,6 +25,12 @@ public class Plane {
     /** Maximum passenger capacity. */
     private int numOfPassengers;
 
+    /** The airline that operates this plane. */
+    @ManyToOne
+    @JoinColumn(name = "airline_id")
+    @JsonIgnoreProperties({"planes"})
+    private Airline airline;
+
     /** Many-to-many relationship with airports visited or served. */
     @ManyToMany
     @JoinTable(
@@ -155,5 +161,23 @@ public class Plane {
      */
     public void setPassengers(List<Passenger> passengers) {
         this.passengers = passengers;
+    }
+
+    /**
+     * Gets the airline operating this plane.
+     *
+     * @return airline
+     */
+    public Airline getAirline() {
+        return airline;
+    }
+
+    /**
+     * Sets the airline operating this plane.
+     *
+     * @param airline airline
+     */
+    public void setAirline(Airline airline) {
+        this.airline = airline;
     }
 }
