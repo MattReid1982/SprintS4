@@ -63,6 +63,7 @@ CREATE TABLE plane (
 CREATE TABLE gate (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     gate_code VARCHAR(50) NOT NULL,
+    terminal VARCHAR(255),
     airport_id BIGINT NOT NULL,
     CONSTRAINT fk_gate_airport FOREIGN KEY (airport_id) REFERENCES airport(id) ON DELETE CASCADE
 );
@@ -115,5 +116,6 @@ CREATE TABLE user_account (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    email VARCHAR(255)
+    email VARCHAR(255),
+    role VARCHAR(50) DEFAULT 'ADMIN'
 );
