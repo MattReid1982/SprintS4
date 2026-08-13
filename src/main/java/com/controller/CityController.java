@@ -16,6 +16,7 @@ import java.util.List;
  * REST controller for managing city endpoints.
  */
 @RestController
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/cities")
 public class CityController {
 

@@ -13,7 +13,7 @@ import java.util.List;
  * REST controller for managing plane endpoints.
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/planes")
 public class PlaneController {
 

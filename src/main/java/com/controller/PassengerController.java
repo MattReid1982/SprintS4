@@ -18,6 +18,7 @@ import java.util.List;
  * REST controller for managing passenger endpoints.
  */
 @RestController
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/passengers")
 public class PassengerController {
 

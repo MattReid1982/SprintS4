@@ -13,7 +13,7 @@ import java.util.List;
  * Supports CRUD operations, lookup by reference/flight, and check-in.
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/bookings")
 public class BookingController {
 

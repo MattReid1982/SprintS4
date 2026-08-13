@@ -13,7 +13,7 @@ import java.util.List;
  * Provides CRUD operations and airport-specific query capabilities.
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/gates")
 public class GateController {
 

@@ -18,6 +18,7 @@ public class Gate {
     private Long id;
 
     /** Gate number/designation (e.g., "A1", "B2"). */
+    @Column(name = "gate_code")
     private String gateNumber;
 
     /** Terminal designation (e.g., "Terminal 1", "International"). */

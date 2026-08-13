@@ -11,7 +11,7 @@ import java.util.List;
  * REST controller for managing airline endpoints.
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/airlines")
 public class AirlineController {
 

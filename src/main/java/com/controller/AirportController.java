@@ -13,7 +13,7 @@ import java.util.List;
  * REST controller for managing airport endpoints.
  */
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/api/airports")
 public class AirportController {
 

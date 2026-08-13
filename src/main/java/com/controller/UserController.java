@@ -11,6 +11,7 @@ import java.util.List;
  * REST controller for managing {@link User} endpoints.
  */
 @RestController
+@CrossOrigin(originPatterns = "*", allowedHeaders = "*")
 @RequestMapping("/users")
 public class UserController {
 
