@@ -70,6 +70,31 @@ public class UserService {
     }
 
     /**
+     * Updates a user's details by ID.
+     *
+     * @param id          user ID to update
+     * @param userDetails user entity with updated fields
+     * @return updated User entity, or empty Optional if not found
+     */
+    public Optional<User> updateUser(Long id, User userDetails) {
+        return userRepository.findById(id).map(existing -> {
+            if (userDetails.getUsername() != null) {
+                existing.setUsername(userDetails.getUsername());
+            }
+            if (userDetails.getEmail() != null) {
+                existing.setEmail(userDetails.getEmail());
+            }
+            if (userDetails.getPasswordHash() != null && !userDetails.getPasswordHash().isBlank()) {
+                existing.setPasswordHash(userDetails.getPasswordHash());
+            }
+            if (userDetails.getRole() != null) {
+                existing.setRole(userDetails.getRole());
+            }
+            return userRepository.save(existing);
+        });
+    }
+
+    /**
      * Authenticates a user by matching their username and password.
      *
      * @param username username
