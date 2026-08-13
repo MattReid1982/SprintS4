@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import com.model.Booking;
 import com.repo.BookingRepository;
 import org.springframework.stereotype.Service;
@@ -96,7 +97,7 @@ public class BookingService {
             }
             if (updated.getCheckInTime() != null) existing.setCheckInTime(updated.getCheckInTime());
             return bookingRepository.save(existing);
-        }).orElseThrow(() -> new RuntimeException("Booking not found with id " + id));
+        }).orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
     }
 
     /**
@@ -112,10 +113,13 @@ public class BookingService {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             );
             return bookingRepository.save(booking);
-        }).orElseThrow(() -> new RuntimeException("Booking not found with id " + id));
+        }).orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
     }
 
     public void deleteBooking(Long id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Booking not found with id: " + id);
+        }
         bookingRepository.deleteById(id);
     }
 }

@@ -56,8 +56,12 @@ public class AirportService {
                         )
                 );
 
-        existingAirport.setName(airport.getName());
-        existingAirport.setAirportCode(airport.getAirportCode());
+        if (airport.getName() != null) {
+            existingAirport.setName(airport.getName());
+        }
+        if (airport.getAirportCode() != null) {
+            existingAirport.setAirportCode(airport.getAirportCode());
+        }
 
         if (airport.getCity() != null) {
             existingAirport.setCity(airport.getCity());

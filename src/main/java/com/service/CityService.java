@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import com.model.City;
 import com.repo.CityRepository;
 
@@ -42,11 +43,11 @@ public class CityService {
      *
      * @param id city ID
      * @return the matching {@link City}
-     * @throws RuntimeException if no city is found with the specified ID
+     * @throws ResourceNotFoundException if no city is found with the specified ID
      */
     @SuppressWarnings("null")
     public City getCity(Long id) {
-        return cityRepository.findById(id).orElseThrow(() -> new RuntimeException("City not found"));
+        return cityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
     }
 
     /**
@@ -66,20 +67,37 @@ public class CityService {
      * @param id   city ID to update
      * @param city city object containing updated details
      * @return the updated {@link City}
+     * @throws ResourceNotFoundException if no city is found with the specified ID
      */
     @SuppressWarnings("null")
     public City updateCity(Long id, City city) {
-        city.setId(id);
-        return cityRepository.save(city);
+        City existingCity = cityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
+
+        if (city.getName() != null) {
+            existingCity.setName(city.getName());
+        }
+        if (city.getProvince() != null) {
+            existingCity.setProvince(city.getProvince());
+        }
+        if (city.getPopulation() > 0) {
+            existingCity.setPopulation(city.getPopulation());
+        }
+
+        return cityRepository.save(existingCity);
     }
 
     /**
      * Deletes a city from the database by its ID.
      *
      * @param id city ID to delete
+     * @throws ResourceNotFoundException if no city is found with the specified ID
      */
     @SuppressWarnings("null")
     public void deleteCity(Long id) {
+        if (!cityRepository.existsById(id)) {
+            throw new ResourceNotFoundException("City not found with id: " + id);
+        }
         cityRepository.deleteById(id);
     }
 }

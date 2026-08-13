@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import com.model.Airline;
 import com.repo.AirlineRepository;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,20 @@ public class AirlineService {
 
     public Airline updateAirline(Long id, Airline updated) {
         return airlineRepository.findById(id).map(existing -> {
-            existing.setName(updated.getName());
-            existing.setCode(updated.getCode());
+            if (updated.getName() != null) {
+                existing.setName(updated.getName());
+            }
+            if (updated.getCode() != null) {
+                existing.setCode(updated.getCode());
+            }
             return airlineRepository.save(existing);
-        }).orElseThrow(() -> new RuntimeException("Airline not found with id " + id));
+        }).orElseThrow(() -> new ResourceNotFoundException("Airline not found with id: " + id));
     }
 
     public void deleteAirline(Long id) {
+        if (!airlineRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Airline not found with id: " + id);
+        }
         airlineRepository.deleteById(id);
     }
 }

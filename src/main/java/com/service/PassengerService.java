@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import com.model.Airport;
 import com.model.Passenger;
 import com.model.Plane;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service class for managing {@link Passenger} entities.
@@ -92,29 +94,39 @@ public class PassengerService {
      * @param id               ID of passenger to update
      * @param updatedPassenger passenger object with updated fields
      * @return updated {@link Passenger}
-     * @throws RuntimeException if passenger is not found
+     * @throws ResourceNotFoundException if passenger is not found
      */
     @Transactional(readOnly = false)
     @SuppressWarnings("null")
     public Passenger updatePassenger(Long id, Passenger updatedPassenger) {
         return passengerRepository.findById(id)
                 .map(passenger -> {
-                    passenger.setFirstName(updatedPassenger.getFirstName());
-                    passenger.setLastName(updatedPassenger.getLastName());
-                    passenger.setPhoneNumber(updatedPassenger.getPhoneNumber());
+                    if (updatedPassenger.getFirstName() != null) {
+                        passenger.setFirstName(updatedPassenger.getFirstName());
+                    }
+                    if (updatedPassenger.getLastName() != null) {
+                        passenger.setLastName(updatedPassenger.getLastName());
+                    }
+                    if (updatedPassenger.getPhoneNumber() != null) {
+                        passenger.setPhoneNumber(updatedPassenger.getPhoneNumber());
+                    }
                     return passengerRepository.save(passenger);
                 })
-                .orElseThrow(() -> new RuntimeException("Passenger not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Passenger not found with id: " + id));
     }
 
     /**
      * Deletes a passenger from the database by ID.
      *
      * @param id passenger ID to delete
+     * @throws ResourceNotFoundException if passenger is not found
      */
     @Transactional(readOnly = false)
     @SuppressWarnings("null")
     public void deletePassenger(Long id) {
+        if (!passengerRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Passenger not found with id: " + id);
+        }
         passengerRepository.deleteById(id);
     }
 
@@ -137,7 +149,7 @@ public class PassengerService {
      */
     public List<Airport> getAirportsUsedByPassenger(Long passengerId) {
         return planeRepository.findByPassengersId(passengerId).stream()
-                .flatMap(plane -> plane.getAirports().stream())
+                .flatMap(plane -> plane.getAirports() != null ? plane.getAirports().stream() : Stream.empty())
                 .distinct()
                 .collect(Collectors.toList());
     }
