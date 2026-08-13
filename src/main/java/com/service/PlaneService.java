@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,7 +8,6 @@ import com.model.Airport;
 import com.model.Plane;
 import com.repo.PlaneRepository;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service class for managing {@link Plane} entities.
@@ -34,23 +34,50 @@ public class PlaneService {
      * Retrieves a plane by its unique numeric ID.
      *
      * @param ID plane ID
-     * @return matching {@link Plane}, or null if not found
+     * @return matching {@link Plane}
+     * @throws ResourceNotFoundException if plane with given ID is not found
      */
     @SuppressWarnings("null")
     public Plane getPlaneByID(long ID) {
-        Optional<Plane> PlaneOptional = planeRepository.findById(ID);
-        return PlaneOptional.orElse(null);
+        return planeRepository.findById(ID)
+                .orElseThrow(() -> new ResourceNotFoundException("Plane not found with id: " + ID));
+    }
+
+    /**
+     * Alias method for getPlaneByID matching Java camelCase naming conventions.
+     *
+     * @param id plane ID
+     * @return matching {@link Plane}
+     * @throws ResourceNotFoundException if plane with given ID is not found
+     */
+    public Plane getPlaneById(Long id) {
+        return getPlaneByID(id);
     }
 
     /**
      * Deletes a plane from the database by ID.
      *
      * @param ID plane ID to delete
+     * @throws ResourceNotFoundException if plane with given ID is not found
      */
     @Transactional(readOnly = false)
     @SuppressWarnings("null")
     public void deletePlaneByID(long ID) {
+        if (!planeRepository.existsById(ID)) {
+            throw new ResourceNotFoundException("Plane not found with id: " + ID);
+        }
         planeRepository.deleteById(ID);
+    }
+
+    /**
+     * Alias method for deletePlaneByID matching Java camelCase naming conventions.
+     *
+     * @param id plane ID to delete
+     * @throws ResourceNotFoundException if plane with given ID is not found
+     */
+    @Transactional(readOnly = false)
+    public void deletePlaneById(Long id) {
+        deletePlaneByID(id);
     }
 
     /**
@@ -84,10 +111,7 @@ public class PlaneService {
      */
     public List<Airport> getAirportsForPlane(long ID) {
         Plane plane = getPlaneByID(ID);
-        if (plane == null) {
-            return List.of();
-        }
-        return plane.getAirports();
+        return plane.getAirports() != null ? plane.getAirports() : List.of();
     }
 
     /**
@@ -95,23 +119,25 @@ public class PlaneService {
      *
      * @param ID           plane ID to update
      * @param updatedPlane plane object with updated fields
-     * @return updated {@link Plane}, or null if plane ID does not exist
+     * @return updated {@link Plane}
+     * @throws ResourceNotFoundException if plane with given ID is not found
      */
     @Transactional(readOnly = false)
     @SuppressWarnings("null")
     public Plane updatePlane(long ID, Plane updatedPlane) {
-        Optional<Plane> planeToUpdateOptional = planeRepository.findById(ID);
+        Plane planeToUpdate = planeRepository.findById(ID)
+                .orElseThrow(() -> new ResourceNotFoundException("Plane not found with id: " + ID));
 
-        if (planeToUpdateOptional.isPresent()) {
-            Plane planeToUpdate = planeToUpdateOptional.get();
-
+        if (updatedPlane.getAirlineName() != null) {
             planeToUpdate.setAirlineName(updatedPlane.getAirlineName());
+        }
+        if (updatedPlane.getType() != null) {
             planeToUpdate.setType(updatedPlane.getType());
+        }
+        if (updatedPlane.getNumOfPassengers() > 0) {
             planeToUpdate.setNumOfPassengers(updatedPlane.getNumOfPassengers());
-
-            return planeRepository.save(planeToUpdate);
         }
 
-        return null;
+        return planeRepository.save(planeToUpdate);
     }
 }

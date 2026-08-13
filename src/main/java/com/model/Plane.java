@@ -56,6 +56,19 @@ public class Plane {
     }
 
     /**
+     * Constructs a Plane with airline name, type, and capacity.
+     *
+     * @param airlineName     airline name
+     * @param type            aircraft type
+     * @param numOfPassengers passenger capacity
+     */
+    public Plane(String airlineName, String type, int numOfPassengers) {
+        this.airlineName = airlineName;
+        this.type = type;
+        this.numOfPassengers = numOfPassengers;
+    }
+
+    /**
      * Gets the plane ID.
      *
      * @return plane ID
@@ -71,6 +84,24 @@ public class Plane {
      */
     public void setID(long ID) {
         this.ID = ID;
+    }
+
+    /**
+     * Alias method for getID matching Java camelCase naming conventions.
+     *
+     * @return plane ID
+     */
+    public Long getId() {
+        return ID;
+    }
+
+    /**
+     * Alias method for setID matching Java camelCase naming conventions.
+     *
+     * @param id plane ID
+     */
+    public void setId(Long id) {
+        this.ID = (id != null) ? id : 0L;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.service;
 
+import com.exception.ResourceNotFoundException;
 import com.model.User;
 import com.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,8 +95,12 @@ public class UserService {
      * Deletes a user by their ID.
      *
      * @param id user ID
+     * @throws ResourceNotFoundException if user with given ID is not found
      */
     public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
         userRepository.deleteById(id);
     }
 
@@ -135,7 +140,7 @@ public class UserService {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            if (password != null && (password.equals(user.getPasswordHash()) || user.getPasswordHash().endsWith(password))) {
+            if (password != null && user.getPasswordHash() != null && password.equals(user.getPasswordHash())) {
                 return Optional.of(user);
             }
         }
