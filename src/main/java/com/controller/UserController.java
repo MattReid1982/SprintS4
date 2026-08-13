@@ -69,6 +69,20 @@ public class UserController {
     }
 
     /**
+     * PUT /users/{id} : Updates a user by ID.
+     *
+     * @param id   user ID
+     * @param user updated user payload
+     * @return ResponseEntity containing updated user, or 404 Not Found
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * DELETE /users/{id} : Deletes a user by ID.
      *
      * @param id user ID

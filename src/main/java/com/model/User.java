@@ -27,6 +27,10 @@ public class User {
     /** Email address associated with the user account. */
     private String email;
 
+    /** Role assigned to this user account (e.g. ADMIN, USER). */
+    @Column(nullable = false)
+    private String role = "ADMIN";
+
     /**
      * Default constructor for JPA.
      */
@@ -44,6 +48,22 @@ public class User {
         this.username = username;
         this.passwordHash = passwordHash;
         this.email = email;
+        this.role = "ADMIN";
+    }
+
+    /**
+     * Constructs a User with username, passwordHash, email, and role.
+     *
+     * @param username     username
+     * @param passwordHash password hash
+     * @param email        email address
+     * @param role         role (e.g. ADMIN, USER)
+     */
+    public User(String username, String passwordHash, String email, String role) {
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.email = email;
+        this.role = role;
     }
 
     /**
@@ -116,5 +136,23 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * Gets the role.
+     *
+     * @return role
+     */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * Sets the role.
+     *
+     * @param role role
+     */
+    public void setRole(String role) {
+        this.role = role;
     }
 }

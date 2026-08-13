@@ -78,10 +78,17 @@ public class DataSeeder implements CommandLineRunner {
     @Transactional
     @SuppressWarnings("null")
     public void run(String... args) throws Exception {
-        if (userRepository.count() == 0) {
-            userRepository.save(new User("admin", "password123", "admin@airport.com"));
-            System.out.println("Default admin user seeded successfully!");
+        // Seed mandatory admin accounts if missing
+        if (!userRepository.existsByUsername("MReid")) {
+            userRepository.save(new User("MReid", "admin123", "mreid@airport.com", "ADMIN"));
         }
+        if (!userRepository.existsByUsername("Kbishop")) {
+            userRepository.save(new User("Kbishop", "admin123", "kbishop@airport.com", "ADMIN"));
+        }
+        if (!userRepository.existsByUsername("CRubia")) {
+            userRepository.save(new User("CRubia", "admin123", "crubia@airport.com", "ADMIN"));
+        }
+        System.out.println("Admin accounts verified in database: MReid, Kbishop, CRubia");
 
         if (planeRepository.count() == 0) {
             // Delete existing data to start clean and match the seed pattern

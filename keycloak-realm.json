@@ -1,0 +1,80 @@
+{
+  "realm": "airport-realm",
+  "enabled": true,
+  "displayName": "Airport Admin Realm",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "clients": [
+    {
+      "clientId": "admin-portal",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:5173/*",
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173",
+        "http://localhost:3000"
+      ],
+      "attributes": {
+        "access.token.lifespan": "3600"
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN",
+        "description": "System administrator with full access to the admin portal"
+      },
+      {
+        "name": "USER",
+        "description": "Standard system user with limited access"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "MReid",
+      "email": "mreid@airport.com",
+      "enabled": true,
+      "firstName": "M",
+      "lastName": "Reid",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "admin123", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "Kbishop",
+      "email": "kbishop@airport.com",
+      "enabled": true,
+      "firstName": "K",
+      "lastName": "Bishop",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "admin123", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "CRubia",
+      "email": "crubia@airport.com",
+      "enabled": true,
+      "firstName": "C",
+      "lastName": "Rubia",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "admin123", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    }
+  ],
+  "passwordPolicy": "length(8)",
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "accessTokenLifespan": 3600
+}
