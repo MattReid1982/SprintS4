@@ -56,6 +56,9 @@ CREATE TABLE plane (
     airline_name VARCHAR(255),
     airline_id BIGINT,
     num_of_passengers INT,
+    tail_number VARCHAR(255),
+    manufacturer VARCHAR(255),
+    status VARCHAR(50) DEFAULT 'ACTIVE',
     CONSTRAINT fk_plane_airline FOREIGN KEY (airline_id) REFERENCES airline(id) ON DELETE SET NULL
 );
 
@@ -65,6 +68,8 @@ CREATE TABLE gate (
     gate_code VARCHAR(50) NOT NULL,
     terminal VARCHAR(255),
     airport_id BIGINT NOT NULL,
+    status VARCHAR(50) DEFAULT 'AVAILABLE',
+    current_flight VARCHAR(50) DEFAULT 'None',
     CONSTRAINT fk_gate_airport FOREIGN KEY (airport_id) REFERENCES airport(id) ON DELETE CASCADE
 );
 

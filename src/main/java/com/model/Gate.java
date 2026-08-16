@@ -24,6 +24,14 @@ public class Gate {
     /** Terminal designation (e.g., "Terminal 1", "International"). */
     private String terminal;
 
+    /** Gate status (e.g., "AVAILABLE", "BOARDING", "OCCUPIED", "MAINTENANCE"). */
+    @Column(length = 50)
+    private String status = "AVAILABLE";
+
+    /** Currently assigned flight number (e.g., "AC102" or "None"). */
+    @Column(length = 50)
+    private String currentFlight = "None";
+
     /**
      * Defines the many-to-one relationship between Gate and Airport.
      * Multiple gates can belong to a single airport.
@@ -151,5 +159,41 @@ public class Gate {
      */
     public void setAirport(Airport airport) {
         this.airport = airport;
+    }
+
+    /**
+     * Gets the gate status.
+     *
+     * @return gate status
+     */
+    public String getStatus() {
+        return status != null ? status : "AVAILABLE";
+    }
+
+    /**
+     * Sets the gate status.
+     *
+     * @param status gate status
+     */
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * Gets the currently assigned flight number.
+     *
+     * @return flight number
+     */
+    public String getCurrentFlight() {
+        return currentFlight != null ? currentFlight : "None";
+    }
+
+    /**
+     * Sets the currently assigned flight number.
+     *
+     * @param currentFlight flight number
+     */
+    public void setCurrentFlight(String currentFlight) {
+        this.currentFlight = currentFlight;
     }
 }

@@ -16,14 +16,24 @@ public class Plane {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ID;
 
-    /** Aircraft type (e.g., "Boeing 737"). */
+    /** Tail / registration number (e.g., "C-FJZU"). */
+    private String tailNumber;
+
+    /** Aircraft type/model (e.g., "Boeing 737 MAX 8"). */
     private String type;
+
+    /** Manufacturer (e.g., "Boeing", "Airbus"). */
+    private String manufacturer;
 
     /** Airline company name operating the plane. */
     private String airlineName;
 
     /** Maximum passenger capacity. */
     private int numOfPassengers;
+
+    /** Operational status (e.g., "ACTIVE", "MAINTENANCE"). */
+    @Column(length = 50)
+    private String status = "ACTIVE";
 
     /** The airline that operates this plane. */
     @ManyToOne
@@ -73,6 +83,7 @@ public class Plane {
      *
      * @return plane ID
      */
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public long getID() {
         return ID;
     }
@@ -82,6 +93,7 @@ public class Plane {
      *
      * @param ID plane ID
      */
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public void setID(long ID) {
         this.ID = ID;
     }
@@ -210,5 +222,42 @@ public class Plane {
      */
     public void setAirline(Airline airline) {
         this.airline = airline;
+    }
+
+    public String getTailNumber() {
+        return tailNumber != null ? tailNumber : ("C-F" + (100 + (ID > 0 ? (int)(ID % 800) : 100)));
+    }
+
+    public void setTailNumber(String tailNumber) {
+        this.tailNumber = tailNumber;
+    }
+
+    public String getManufacturer() {
+        if (manufacturer != null) return manufacturer;
+        if (type != null && type.contains("Airbus")) return "Airbus";
+        if (type != null && type.contains("Boeing")) return "Boeing";
+        if (type != null && type.contains("Embraer")) return "Embraer";
+        if (type != null && type.contains("Dash")) return "De Havilland";
+        return "Boeing";
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public String getStatus() {
+        return status != null ? status : "ACTIVE";
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getModel() {
+        return getType();
+    }
+
+    public int getCapacity() {
+        return getNumOfPassengers();
     }
 }

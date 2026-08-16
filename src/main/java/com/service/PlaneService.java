@@ -137,6 +137,18 @@ public class PlaneService {
         if (updatedPlane.getNumOfPassengers() > 0) {
             planeToUpdate.setNumOfPassengers(updatedPlane.getNumOfPassengers());
         }
+        if (updatedPlane.getTailNumber() != null) {
+            planeToUpdate.setTailNumber(updatedPlane.getTailNumber());
+        }
+        if (updatedPlane.getManufacturer() != null) {
+            planeToUpdate.setManufacturer(updatedPlane.getManufacturer());
+        }
+        if (updatedPlane.getStatus() != null) {
+            planeToUpdate.setStatus(updatedPlane.getStatus());
+        }
+        if (updatedPlane.getAirline() != null) {
+            planeToUpdate.setAirline(updatedPlane.getAirline());
+        }
 
         return planeRepository.save(planeToUpdate);
     }

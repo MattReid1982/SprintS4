@@ -94,6 +94,12 @@ public class GateService {
         if (gate.getAirport() != null) {
             existingGate.setAirport(gate.getAirport());
         }
+        if (gate.getStatus() != null) {
+            existingGate.setStatus(gate.getStatus());
+        }
+        if (gate.getCurrentFlight() != null) {
+            existingGate.setCurrentFlight(gate.getCurrentFlight());
+        }
 
         return gateRepository.save(existingGate);
     }
