@@ -51,15 +51,15 @@ INSERT INTO plane (id, type, airline_name, airline_id, num_of_passengers) VALUES
 INSERT INTO plane (id, type, airline_name, airline_id, num_of_passengers) VALUES (4, 'Airbus A330-300', 'Air Transat', 4, 345);
 
 -- 6. Seed Gates
-INSERT INTO gate (id, gate_code, airport_id) VALUES (1, 'A12', 1);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (2, 'A14', 1);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (3, 'B20', 1);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (4, 'Gate 1', 2);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (5, 'C42', 3);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (6, 'C44', 3);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (7, 'D10', 4);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (8, 'E05', 5);
-INSERT INTO gate (id, gate_code, airport_id) VALUES (9, 'Gate 3', 6);
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (1, 'A12', 1, 'AC101', 'ON TIME');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (2, 'A14', 1, 'None', 'AVAILABLE');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (3, 'B20', 1, 'None', 'AVAILABLE');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (4, 'Gate 1', 2, 'PD305', 'BOARDING');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (5, 'C42', 3, 'WS204', 'DELAYED');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (6, 'C44', 3, 'None', 'AVAILABLE');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (7, 'D10', 4, 'None', 'AVAILABLE');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (8, 'E05', 5, 'TS401', 'SCHEDULED');
+INSERT INTO gate (id, gate_code, airport_id, current_flight, status) VALUES (9, 'Gate 3', 6, 'AC602', 'LANDED');
 
 -- 7. Seed Plane-Airport relationships
 INSERT INTO plane_airport (plane_id, airport_id) VALUES (1, 1);
