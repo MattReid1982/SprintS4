@@ -22,6 +22,8 @@ public class GateServiceTest {
 
     @Mock
     private GateRepository gateRepository;
+    @Mock
+    private com.repo.AirportRepository airportRepository;
 
     @InjectMocks
     private GateService gateService;

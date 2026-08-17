@@ -2,8 +2,10 @@ package com.service;
 
 import com.exception.ResourceNotFoundException;
 import com.model.Gate;
+import com.repo.AirportRepository;
 import com.repo.GateRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,17 +13,21 @@ import java.util.List;
  * Service class for managing Gate business logic.
  */
 @Service
+@Transactional
 public class GateService {
 
     private final GateRepository gateRepository;
+    private final AirportRepository airportRepository;
 
     /**
-     * Constructs a GateService with required GateRepository dependency.
+     * Constructs a GateService with required dependencies.
      *
-     * @param gateRepository gate repository
+     * @param gateRepository    gate repository
+     * @param airportRepository airport repository
      */
-    public GateService(GateRepository gateRepository) {
+    public GateService(GateRepository gateRepository, AirportRepository airportRepository) {
         this.gateRepository = gateRepository;
+        this.airportRepository = airportRepository;
     }
 
     /**
@@ -29,6 +35,7 @@ public class GateService {
      *
      * @return list of all gates
      */
+    @Transactional(readOnly = true)
     public List<Gate> getAllGates() {
         return gateRepository.findAll();
     }
@@ -66,6 +73,9 @@ public class GateService {
      * @return saved Gate entity
      */
     public Gate saveGate(Gate gate) {
+        if (gate.getAirport() != null && gate.getAirport().getId() != null) {
+            airportRepository.findById(gate.getAirport().getId()).ifPresent(gate::setAirport);
+        }
         return gateRepository.save(gate);
     }
 
@@ -91,8 +101,8 @@ public class GateService {
         if (gate.getTerminal() != null) {
             existingGate.setTerminal(gate.getTerminal());
         }
-        if (gate.getAirport() != null) {
-            existingGate.setAirport(gate.getAirport());
+        if (gate.getAirport() != null && gate.getAirport().getId() != null) {
+            airportRepository.findById(gate.getAirport().getId()).ifPresent(existingGate::setAirport);
         }
         if (gate.getStatus() != null) {
             existingGate.setStatus(gate.getStatus());
