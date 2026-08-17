@@ -42,7 +42,8 @@ public class PassengerController {
      * @return a {@link Page} of passengers
      */
     @GetMapping
-    public Page<Passenger> getAllPassengers(@PageableDefault(page = 0, size = 20) Pageable pageable) {
+    public Page<Passenger> getAllPassengers(
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
         return passengerService.getAllPassengers(pageable);
     }
 

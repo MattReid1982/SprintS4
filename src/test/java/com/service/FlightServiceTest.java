@@ -12,6 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -85,6 +90,65 @@ public class FlightServiceTest {
         assertNotNull(flights);
         assertTrue(flights.isEmpty());
         verify(flightRepository, times(1)).findAll();
+    }
+
+    // ==================== PAGINATION ====================
+
+    /** Verifies paginated retrieval returns correct page content and metadata. */
+    @Test
+    public void testGetAllFlightsPaginated() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Flight> flightPage = new PageImpl<>(List.of(testFlight), pageable, 1);
+
+        when(flightRepository.findAll(pageable)).thenReturn(flightPage);
+
+        Page<Flight> result = flightService.getAllFlights(pageable);
+
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        assertEquals("AC101", result.getContent().get(0).getFlightNumber());
+        assertEquals(0, result.getNumber());
+        assertEquals(10, result.getSize());
+        verify(flightRepository, times(1)).findAll(pageable);
+    }
+
+    /** Verifies paginated retrieval with page size 5 and sorting descending by flightNumber. */
+    @Test
+    public void testGetAllFlightsPaginatedDescSort() {
+        Flight flight2 = new Flight();
+        flight2.setId(2L);
+        flight2.setFlightNumber("WS101");
+
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "flightNumber"));
+        Page<Flight> flightPage = new PageImpl<>(List.of(flight2, testFlight), pageable, 2);
+
+        when(flightRepository.findAll(pageable)).thenReturn(flightPage);
+
+        Page<Flight> result = flightService.getAllFlights(pageable);
+
+        assertNotNull(result);
+        assertEquals(2, result.getTotalElements());
+        assertEquals("WS101", result.getContent().get(0).getFlightNumber());
+        assertEquals("AC101", result.getContent().get(1).getFlightNumber());
+        assertEquals(5, result.getSize());
+        verify(flightRepository, times(1)).findAll(pageable);
+    }
+
+    /** Verifies paginated retrieval returns empty page when no flights exist. */
+    @Test
+    public void testGetAllFlightsPaginatedEmpty() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Flight> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+
+        when(flightRepository.findAll(pageable)).thenReturn(emptyPage);
+
+        Page<Flight> result = flightService.getAllFlights(pageable);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        assertEquals(0, result.getTotalElements());
+        verify(flightRepository, times(1)).findAll(pageable);
     }
 
     @Test

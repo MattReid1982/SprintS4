@@ -3,6 +3,8 @@ package com.service;
 import com.exception.ResourceNotFoundException;
 import com.model.Flight;
 import com.repo.FlightRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,17 @@ public class FlightService {
      */
     public List<Flight> getAllFlights() {
         return flightRepository.findAll();
+    }
+
+    /**
+     * Retrieves a paginated list of flights from the database.
+     *
+     * @param pageable pagination and sorting parameters (page, size, sort)
+     * @return a {@link Page} containing the requested flights
+     */
+    @SuppressWarnings("null")
+    public Page<Flight> getAllFlights(Pageable pageable) {
+        return flightRepository.findAll(pageable);
     }
 
     /**

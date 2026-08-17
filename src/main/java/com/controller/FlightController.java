@@ -2,14 +2,15 @@ package com.controller;
 
 import com.model.Flight;
 import com.service.FlightService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * REST controller for managing flight endpoints.
- * Provides CRUD operations for scheduled flights.
+ * Provides CRUD operations for scheduled flights with pagination support.
  */
 @RestController
 @CrossOrigin(originPatterns = "*", allowedHeaders = "*")
@@ -22,10 +23,16 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-    /** Returns all flights. */
+    /**
+     * GET /api/flights : Retrieves a paginated list of flights.
+     *
+     * @param pageable pagination parameters (defaults to page 0, size 10, sorted by id ascending)
+     * @return a {@link Page} of flights
+     */
     @GetMapping
-    public List<Flight> getAllFlights() {
-        return flightService.getAllFlights();
+    public Page<Flight> getAllFlights(
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+        return flightService.getAllFlights(pageable);
     }
 
     /** Returns a single flight by ID, or 404 if not found. */

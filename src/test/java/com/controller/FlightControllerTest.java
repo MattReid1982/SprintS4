@@ -9,6 +9,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -51,33 +56,66 @@ public class FlightControllerTest {
         testFlight.setStatus(FlightStatus.ON_TIME);
     }
 
-    // ==================== GET ALL ====================
+    // ==================== GET ALL (PAGINATED) ====================
 
-    /** Verify GET /api/flights returns 200 with a JSON array of flights. */
+    /** Verify GET /api/flights returns 200 with paginated content and metadata. */
     @Test
     public void testGetAllFlights() throws Exception {
         Flight flight2 = new Flight();
         flight2.setId(2L);
         flight2.setFlightNumber("WS101");
 
-        when(flightService.getAllFlights()).thenReturn(List.of(testFlight, flight2));
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Flight> flightPage = new PageImpl<>(List.of(testFlight, flight2), pageable, 2);
+
+        when(flightService.getAllFlights(any(Pageable.class))).thenReturn(flightPage);
 
         mockMvc.perform(get("/api/flights"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].flightNumber").value("AC101"))
-                .andExpect(jsonPath("$[1].flightNumber").value("WS101"));
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].flightNumber").value("AC101"))
+                .andExpect(jsonPath("$.content[1].flightNumber").value("WS101"))
+                .andExpect(jsonPath("$.totalElements").value(2))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.number").value(0));
     }
 
-    /** Verify GET /api/flights returns 200 with an empty array when no flights exist. */
+    /** Verify GET /api/flights returns 200 with empty content when no flights exist. */
     @Test
     public void testGetAllFlightsEmpty() throws Exception {
-        when(flightService.getAllFlights()).thenReturn(List.of());
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Flight> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+
+        when(flightService.getAllFlights(any(Pageable.class))).thenReturn(emptyPage);
 
         mockMvc.perform(get("/api/flights"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$").isEmpty());
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0));
+    }
+
+    /** Verify GET /api/flights?page=0&size=5&sort=flightNumber,desc applies custom pagination. */
+    @Test
+    public void testGetAllFlightsCustomPagination() throws Exception {
+        Flight flight2 = new Flight();
+        flight2.setId(2L);
+        flight2.setFlightNumber("WS101");
+
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "flightNumber"));
+        Page<Flight> flightPage = new PageImpl<>(List.of(flight2, testFlight), pageable, 2);
+
+        when(flightService.getAllFlights(any(Pageable.class))).thenReturn(flightPage);
+
+        mockMvc.perform(get("/api/flights")
+                        .param("page", "0")
+                        .param("size", "5")
+                        .param("sort", "flightNumber,desc"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].flightNumber").value("WS101"))
+                .andExpect(jsonPath("$.content[1].flightNumber").value("AC101"))
+                .andExpect(jsonPath("$.size").value(5));
     }
 
     // ==================== GET BY ID ====================

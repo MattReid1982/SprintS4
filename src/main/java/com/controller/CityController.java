@@ -44,7 +44,8 @@ public class CityController {
      * @return a {@link Page} containing the requested cities
      */
     @GetMapping
-    public Page<City> getCities(@PageableDefault(page = 0, size = 20) Pageable pageable) {
+    public Page<City> getCities(
+            @PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
         return cityService.getAllCities(pageable);
     }
 

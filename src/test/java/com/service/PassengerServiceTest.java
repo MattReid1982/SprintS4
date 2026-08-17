@@ -12,6 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +63,63 @@ public class PassengerServiceTest {
         List<Passenger> passengers = passengerService.getAllPassengers();
         assertEquals(1, passengers.size());
         assertEquals("John", passengers.get(0).getFirstName());
+    }
+
+    // ==================== PAGINATION ====================
+
+    /** Verifies paginated retrieval returns correct page content and metadata. */
+    @Test
+    public void testGetAllPassengersPaginated() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id"));
+        Page<Passenger> passengerPage = new PageImpl<>(List.of(testPassenger), pageable, 1);
+
+        when(passengerRepository.findAll(pageable)).thenReturn(passengerPage);
+
+        Page<Passenger> result = passengerService.getAllPassengers(pageable);
+
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        assertEquals("John", result.getContent().get(0).getFirstName());
+        assertEquals(0, result.getNumber());
+        assertEquals(10, result.getSize());
+        verify(passengerRepository, times(1)).findAll(pageable);
+    }
+
+    /** Verifies paginated retrieval with descending sort by lastName. */
+    @Test
+    public void testGetAllPassengersPaginatedDescSort() {
+        Passenger passenger2 = new Passenger("Jane", "Smith", "709-555-0100");
+        passenger2.setId(2L);
+
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "lastName"));
+        Page<Passenger> passengerPage = new PageImpl<>(List.of(passenger2, testPassenger), pageable, 2);
+
+        when(passengerRepository.findAll(pageable)).thenReturn(passengerPage);
+
+        Page<Passenger> result = passengerService.getAllPassengers(pageable);
+
+        assertNotNull(result);
+        assertEquals(2, result.getTotalElements());
+        assertEquals("Smith", result.getContent().get(0).getLastName());
+        assertEquals("Doe", result.getContent().get(1).getLastName());
+        assertEquals(5, result.getSize());
+        verify(passengerRepository, times(1)).findAll(pageable);
+    }
+
+    /** Verifies paginated retrieval returns empty page when no passengers exist. */
+    @Test
+    public void testGetAllPassengersPaginatedEmpty() {
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Passenger> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+
+        when(passengerRepository.findAll(pageable)).thenReturn(emptyPage);
+
+        Page<Passenger> result = passengerService.getAllPassengers(pageable);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        assertEquals(0, result.getTotalElements());
+        verify(passengerRepository, times(1)).findAll(pageable);
     }
 
     @Test
