@@ -60,7 +60,7 @@ public class PassengerService {
      * @param pageable pagination and sorting parameters
      * @return a {@link Page} containing the requested passengers
      */
-    @SuppressWarnings("null")
+
     public Page<Passenger> getAllPassengers(Pageable pageable) {
         return passengerRepository.findAll(pageable);
     }
@@ -71,7 +71,7 @@ public class PassengerService {
      * @param id passenger ID
      * @return optional containing matching passenger if found
      */
-    @SuppressWarnings("null")
+
     public Optional<Passenger> getPassengerById(Long id) {
         return passengerRepository.findById(id);
     }
@@ -83,7 +83,6 @@ public class PassengerService {
      * @return newly saved {@link Passenger}
      */
     @Transactional(readOnly = false)
-    @SuppressWarnings("null")
     public Passenger createPassenger(Passenger passenger) {
         return passengerRepository.save(passenger);
     }
@@ -97,7 +96,6 @@ public class PassengerService {
      * @throws ResourceNotFoundException if passenger is not found
      */
     @Transactional(readOnly = false)
-    @SuppressWarnings("null")
     public Passenger updatePassenger(Long id, Passenger updatedPassenger) {
         return passengerRepository.findById(id)
                 .map(passenger -> {
@@ -122,7 +120,6 @@ public class PassengerService {
      * @throws ResourceNotFoundException if passenger is not found
      */
     @Transactional(readOnly = false)
-    @SuppressWarnings("null")
     public void deletePassenger(Long id) {
         if (!passengerRepository.existsById(id)) {
             throw new ResourceNotFoundException("Passenger not found with id: " + id);
@@ -136,7 +133,7 @@ public class PassengerService {
      * @param passengerId passenger ID
      * @return list of {@link Plane} entities
      */
-    @SuppressWarnings("null")
+
     public List<Plane> getPlanesForPassenger(Long passengerId) {
         return planeRepository.findByPassengersId(passengerId);
     }

@@ -37,7 +37,7 @@ public class PlaneService {
      * @return matching {@link Plane}
      * @throws ResourceNotFoundException if plane with given ID is not found
      */
-    @SuppressWarnings("null")
+  
     public Plane getPlaneByID(long ID) {
         return planeRepository.findById(ID)
                 .orElseThrow(() -> new ResourceNotFoundException("Plane not found with id: " + ID));
@@ -61,7 +61,6 @@ public class PlaneService {
      * @throws ResourceNotFoundException if plane with given ID is not found
      */
     @Transactional(readOnly = false)
-    @SuppressWarnings("null")
     public void deletePlaneByID(long ID) {
         if (!planeRepository.existsById(ID)) {
             throw new ResourceNotFoundException("Plane not found with id: " + ID);
@@ -87,7 +86,6 @@ public class PlaneService {
      * @return newly saved {@link Plane}
      */
     @Transactional(readOnly = false)
-    @SuppressWarnings("null")
     public Plane createPlane(Plane newPlane) {
         return planeRepository.save(newPlane);
     }
@@ -98,7 +96,6 @@ public class PlaneService {
      * @param passengerId passenger ID
      * @return list of {@link Plane} entities
      */
-    @SuppressWarnings("null")
     public List<Plane> getPlanesByPassengerId(Long passengerId) {
         return planeRepository.findByPassengersId(passengerId);
     }
@@ -123,7 +120,6 @@ public class PlaneService {
      * @throws ResourceNotFoundException if plane with given ID is not found
      */
     @Transactional(readOnly = false)
-    @SuppressWarnings("null")
     public Plane updatePlane(long ID, Plane updatedPlane) {
         Plane planeToUpdate = planeRepository.findById(ID)
                 .orElseThrow(() -> new ResourceNotFoundException("Plane not found with id: " + ID));
