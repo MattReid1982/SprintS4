@@ -1,9 +1,10 @@
 package com.service;
 
 import com.exception.ResourceNotFoundException;
-import com.model.Booking;
-import com.repo.BookingRepository;
+import com.model.*;
+import com.repo.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,39 +13,125 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Service layer for Booking business logic including check-in workflow.
+ * Service layer for Booking business logic including check-in workflow and gate synchronization.
  */
 @Service
+@Transactional
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final PassengerRepository passengerRepository;
+    private final PlaneRepository planeRepository;
+    private final AirlineRepository airlineRepository;
+    private final AirportRepository airportRepository;
+    private final GateRepository gateRepository;
 
-    public BookingService(BookingRepository bookingRepository) {
+    public BookingService(
+            BookingRepository bookingRepository,
+            PassengerRepository passengerRepository,
+            PlaneRepository planeRepository,
+            AirlineRepository airlineRepository,
+            AirportRepository airportRepository,
+            GateRepository gateRepository) {
         this.bookingRepository = bookingRepository;
+        this.passengerRepository = passengerRepository;
+        this.planeRepository = planeRepository;
+        this.airlineRepository = airlineRepository;
+        this.airportRepository = airportRepository;
+        this.gateRepository = gateRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Optional<Booking> getBookingById(Long id) {
         return bookingRepository.findById(id);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Booking> getBookingByReference(String reference) {
         return bookingRepository.findByBookingReference(reference);
     }
 
+    @Transactional(readOnly = true)
     public List<Booking> getBookingsByFlightNumber(String flightNumber) {
         return bookingRepository.findByFlightNumber(flightNumber);
     }
 
+    @Transactional(readOnly = true)
     public List<Booking> getBookingsByStatus(String status) {
         return bookingRepository.findByStatus(status);
     }
 
+    @Transactional(readOnly = true)
     public List<Booking> getBookingsByPassenger(Long passengerId) {
         return bookingRepository.findByPassengerId(passengerId);
+    }
+
+    /**
+     * Resolves foreign entities (Passenger, Plane, Airline, Airports, Gate) to managed entities.
+     */
+    private void resolveRelationships(Booking booking) {
+        if (booking.getPassenger() != null) {
+            Long passengerId = booking.getPassenger().getId();
+            if (passengerId != null && passengerId > 0) {
+                booking.setPassenger(passengerRepository.findById(passengerId).orElse(null));
+            } else {
+                booking.setPassenger(null);
+            }
+        }
+        if (booking.getPlane() != null) {
+            Long planeId = booking.getPlane().getId() != null ? booking.getPlane().getId() : booking.getPlane().getID();
+            if (planeId != null && planeId > 0) {
+                booking.setPlane(planeRepository.findById(planeId).orElse(null));
+            } else {
+                booking.setPlane(null);
+            }
+        }
+        if (booking.getAirline() != null) {
+            Long airlineId = booking.getAirline().getId();
+            if (airlineId != null && airlineId > 0) {
+                booking.setAirline(airlineRepository.findById(airlineId).orElse(null));
+            } else {
+                booking.setAirline(null);
+            }
+        }
+        if (booking.getOriginAirport() != null) {
+            Long originId = booking.getOriginAirport().getId();
+            if (originId != null && originId > 0) {
+                booking.setOriginAirport(airportRepository.findById(originId).orElse(null));
+            } else {
+                booking.setOriginAirport(null);
+            }
+        }
+        if (booking.getDestinationAirport() != null) {
+            Long destId = booking.getDestinationAirport().getId();
+            if (destId != null && destId > 0) {
+                booking.setDestinationAirport(airportRepository.findById(destId).orElse(null));
+            } else {
+                booking.setDestinationAirport(null);
+            }
+        }
+        if (booking.getGate() != null) {
+            Long gateId = booking.getGate().getId();
+            if (gateId != null && gateId > 0) {
+                Gate gate = gateRepository.findById(gateId).orElse(null);
+                booking.setGate(gate);
+                // Sync gate current flight and status if gate was assigned
+                if (gate != null && booking.getFlightNumber() != null && !booking.getFlightNumber().isBlank()) {
+                    gate.setCurrentFlight(booking.getFlightNumber());
+                    if ("AVAILABLE".equalsIgnoreCase(gate.getStatus()) || gate.getStatus() == null) {
+                        gate.setStatus("OCCUPIED");
+                    }
+                    gateRepository.save(gate);
+                }
+            } else {
+                booking.setGate(null);
+            }
+        }
     }
 
     /**
@@ -66,6 +153,8 @@ public class BookingService {
         if ("CHECKED_IN".equalsIgnoreCase(booking.getStatus()) && (booking.getCheckInTime() == null || booking.getCheckInTime().isBlank())) {
             booking.setCheckInTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         }
+
+        resolveRelationships(booking);
         return bookingRepository.save(booking);
     }
 
@@ -78,6 +167,8 @@ public class BookingService {
      */
     public Booking updateBooking(Long id, Booking updated) {
         return bookingRepository.findById(id).map(existing -> {
+            resolveRelationships(updated);
+
             if (updated.getFlightNumber() != null) existing.setFlightNumber(updated.getFlightNumber());
             if (updated.getPassenger() != null) existing.setPassenger(updated.getPassenger());
             if (updated.getPlane() != null) existing.setPlane(updated.getPlane());

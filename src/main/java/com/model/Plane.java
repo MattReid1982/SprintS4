@@ -79,7 +79,27 @@ public class Plane {
     }
 
     /**
-     * Gets the plane ID.
+     * Primary getter for plane ID for JPA and Jackson JSON serialization.
+     *
+     * @return plane ID
+     */
+    @com.fasterxml.jackson.annotation.JsonProperty("id")
+    public Long getId() {
+        return ID;
+    }
+
+    /**
+     * Primary setter for plane ID for JPA and Jackson JSON deserialization.
+     *
+     * @param id plane ID
+     */
+    @com.fasterxml.jackson.annotation.JsonProperty("id")
+    public void setId(Long id) {
+        this.ID = (id != null) ? id : 0L;
+    }
+
+    /**
+     * Alias method for getID matching legacy naming conventions.
      *
      * @return plane ID
      */
@@ -89,31 +109,13 @@ public class Plane {
     }
 
     /**
-     * Sets the plane ID.
+     * Alias method for setID matching legacy naming conventions.
      *
      * @param ID plane ID
      */
     @com.fasterxml.jackson.annotation.JsonIgnore
     public void setID(long ID) {
         this.ID = ID;
-    }
-
-    /**
-     * Alias method for getID matching Java camelCase naming conventions.
-     *
-     * @return plane ID
-     */
-    public Long getId() {
-        return ID;
-    }
-
-    /**
-     * Alias method for setID matching Java camelCase naming conventions.
-     *
-     * @param id plane ID
-     */
-    public void setId(Long id) {
-        this.ID = (id != null) ? id : 0L;
     }
 
     /**

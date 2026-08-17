@@ -21,6 +21,16 @@ public class BookingServiceTest {
 
     @Mock
     private BookingRepository bookingRepository;
+    @Mock
+    private com.repo.PassengerRepository passengerRepository;
+    @Mock
+    private com.repo.PlaneRepository planeRepository;
+    @Mock
+    private com.repo.AirlineRepository airlineRepository;
+    @Mock
+    private com.repo.AirportRepository airportRepository;
+    @Mock
+    private com.repo.GateRepository gateRepository;
 
     @InjectMocks
     private BookingService bookingService;

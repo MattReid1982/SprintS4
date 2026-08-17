@@ -1,21 +1,17 @@
 package com;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 /**
- * Secondary application entry point for Sprint S4 Spring Boot application.
+ * Convenience runner that delegates to {@link AirportApiApplication}.
  */
-@SpringBootApplication
 public class SprintS4Application {
 
     /**
-     * Starts the Sprint S4 application.
+     * Starts the application by delegating to AirportApiApplication.
      *
-     * @param args command line arguments passed to the application
+     * @param args command line arguments
      */
     public static void main(String[] args) {
-        System.setProperty("spring.classformat.ignore", "true");
-        SpringApplication.run(SprintS4Application.class, args);
+        AirportApiApplication.main(args);
     }
 }
+
