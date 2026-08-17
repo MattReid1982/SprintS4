@@ -33,7 +33,7 @@ public class CityService {
      * @param pageable pagination and sorting parameters
      * @return a {@link Page} containing the requested cities
      */
-    @SuppressWarnings("null")
+
     public Page<City> getAllCities(Pageable pageable) {
         return cityRepository.findAll(pageable);
     }
@@ -45,7 +45,7 @@ public class CityService {
      * @return the matching {@link City}
      * @throws ResourceNotFoundException if no city is found with the specified ID
      */
-    @SuppressWarnings("null")
+
     public City getCity(Long id) {
         return cityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
     }
@@ -56,7 +56,7 @@ public class CityService {
      * @param city the city to create
      * @return the newly saved {@link City}
      */
-    @SuppressWarnings("null")
+
     public City saveCity(City city) {
         return cityRepository.save(city);
     }
@@ -69,7 +69,7 @@ public class CityService {
      * @return the updated {@link City}
      * @throws ResourceNotFoundException if no city is found with the specified ID
      */
-    @SuppressWarnings("null")
+
     public City updateCity(Long id, City city) {
         City existingCity = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found with id: " + id));
@@ -93,7 +93,7 @@ public class CityService {
      * @param id city ID to delete
      * @throws ResourceNotFoundException if no city is found with the specified ID
      */
-    @SuppressWarnings("null")
+
     public void deleteCity(Long id) {
         if (!cityRepository.existsById(id)) {
             throw new ResourceNotFoundException("City not found with id: " + id);

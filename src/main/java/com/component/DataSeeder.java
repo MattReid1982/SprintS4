@@ -76,7 +76,6 @@ public class DataSeeder implements CommandLineRunner {
      */
     @Override
     @Transactional
-    @SuppressWarnings("null")
     public void run(String... args) throws Exception {
         // Seed mandatory admin accounts if missing
         if (!userRepository.existsByUsername("MReid")) {
