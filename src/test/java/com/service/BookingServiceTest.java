@@ -56,6 +56,16 @@ public class BookingServiceTest {
     }
 
     @Test
+    public void testGetBookingsFilter() {
+        when(bookingRepository.findByFlightNumberAndGateIdAndStatus("AC101", 1L, "CHECKED_IN"))
+                .thenReturn(List.of(testBooking));
+
+        List<Booking> results = bookingService.getBookings("CHECKED_IN", "AC101", 1L);
+        assertEquals(1, results.size());
+        verify(bookingRepository, times(1)).findByFlightNumberAndGateIdAndStatus("AC101", 1L, "CHECKED_IN");
+    }
+
+    @Test
     public void testGetBookingByIdFound() {
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(testBooking));
 

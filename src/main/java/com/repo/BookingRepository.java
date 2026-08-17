@@ -44,4 +44,49 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
      * @return list of bookings
      */
     List<Booking> findByPassengerId(Long passengerId);
+
+    /**
+     * Finds bookings filtered by flight number, gate ID, and status.
+     *
+     * @param flightNumber flight number
+     * @param gateId       gate ID
+     * @param status       booking status
+     * @return list of bookings
+     */
+    List<Booking> findByFlightNumberAndGateIdAndStatus(String flightNumber, Long gateId, String status);
+
+    /**
+     * Finds bookings for a specific flight at a specific gate.
+     *
+     * @param flightNumber flight number
+     * @param gateId       gate ID
+     * @return list of bookings
+     */
+    List<Booking> findByFlightNumberAndGateId(String flightNumber, Long gateId);
+
+    /**
+     * Finds bookings for a specific gate filtered by status.
+     *
+     * @param gateId gate ID
+     * @param status booking status
+     * @return list of bookings
+     */
+    List<Booking> findByGateIdAndStatus(Long gateId, String status);
+
+    /**
+     * Finds all bookings assigned to a specific gate.
+     *
+     * @param gateId gate ID
+     * @return list of bookings
+     */
+    List<Booking> findByGateId(Long gateId);
+
+    /**
+     * Finds bookings for a specific flight filtered by status.
+     *
+     * @param flightNumber flight number
+     * @param status       booking status
+     * @return list of bookings
+     */
+    List<Booking> findByFlightNumberAndStatus(String flightNumber, String status);
 }

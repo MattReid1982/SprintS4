@@ -24,19 +24,25 @@ public class BookingController {
     }
 
     /**
-     * GET /api/bookings — returns all bookings, with optional filter by status or flight number.
+     * GET /api/bookings — returns all bookings, with optional filter by status, flight number, or gate ID.
      */
     @GetMapping
     public List<Booking> getAllBookings(
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String flightNumber) {
-        if (status != null) {
-            return bookingService.getBookingsByStatus(status);
-        }
-        if (flightNumber != null) {
-            return bookingService.getBookingsByFlightNumber(flightNumber);
-        }
-        return bookingService.getAllBookings();
+            @RequestParam(required = false) String flightNumber,
+            @RequestParam(required = false) Long gateId) {
+        return bookingService.getBookings(status, flightNumber, gateId);
+    }
+
+    /**
+     * GET /api/bookings/manifest — returns checked-in passengers for a flight at a specific gate.
+     */
+    @GetMapping("/manifest")
+    public List<Booking> getFlightGateManifest(
+            @RequestParam(required = false) String flightNumber,
+            @RequestParam(required = false) Long gateId,
+            @RequestParam(defaultValue = "CHECKED_IN") String status) {
+        return bookingService.getBookings(status, flightNumber, gateId);
     }
 
     /**

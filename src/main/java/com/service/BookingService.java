@@ -47,6 +47,26 @@ public class BookingService {
     }
 
     @Transactional(readOnly = true)
+    public List<Booking> getBookings(String status, String flightNumber, Long gateId) {
+        if (flightNumber != null && gateId != null && status != null) {
+            return bookingRepository.findByFlightNumberAndGateIdAndStatus(flightNumber, gateId, status);
+        } else if (flightNumber != null && gateId != null) {
+            return bookingRepository.findByFlightNumberAndGateId(flightNumber, gateId);
+        } else if (gateId != null && status != null) {
+            return bookingRepository.findByGateIdAndStatus(gateId, status);
+        } else if (flightNumber != null && status != null) {
+            return bookingRepository.findByFlightNumberAndStatus(flightNumber, status);
+        } else if (gateId != null) {
+            return bookingRepository.findByGateId(gateId);
+        } else if (flightNumber != null) {
+            return bookingRepository.findByFlightNumber(flightNumber);
+        } else if (status != null) {
+            return bookingRepository.findByStatus(status);
+        }
+        return bookingRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Booking> getBookingById(Long id) {
         return bookingRepository.findById(id);
     }
