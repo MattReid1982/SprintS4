@@ -15,10 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import com.exception.ResourceNotFoundException;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -73,6 +74,16 @@ public class GateControllerTest {
                 .andExpect(jsonPath("$.terminal").value("Terminal 1"));
     }
 
+    /** Verify GET /api/gates/{id} returns 404 when the gate does not exist. */
+    @Test
+    public void testGetGateByIdNotFound() throws Exception {
+        when(gateService.getGate(99L))
+                .thenThrow(new ResourceNotFoundException("Gate not found with id: 99"));
+
+        mockMvc.perform(get("/api/gates/99"))
+                .andExpect(status().isNotFound());
+    }
+
     @Test
     public void testGetGatesByAirportEndpoint() throws Exception {
         when(gateService.getGatesByAirport(10L)).thenReturn(List.of(testGate));
@@ -100,6 +111,17 @@ public class GateControllerTest {
                 .andExpect(jsonPath("$.gateNumber").value("A1"));
     }
 
+    /** Verify POST /api/gates returns 400 when the JSON payload is malformed. */
+    @Test
+    public void testCreateGateBadRequest() throws Exception {
+        String badPayload = "{ invalid json }";
+
+        mockMvc.perform(post("/api/gates")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(badPayload))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     public void testUpdateGate() throws Exception {
         when(gateService.updateGate(eq(1L), any(Gate.class))).thenReturn(testGate);
@@ -118,11 +140,51 @@ public class GateControllerTest {
                 .andExpect(jsonPath("$.gateNumber").value("A1"));
     }
 
+    /** Verify PUT /api/gates/{id} returns 404 when the gate does not exist. */
+    @Test
+    public void testUpdateGateNotFound() throws Exception {
+        when(gateService.updateGate(eq(99L), any(Gate.class)))
+                .thenThrow(new ResourceNotFoundException("Gate not found with id: 99"));
+
+        String jsonPayload = """
+                {
+                    "gateNumber": "A1",
+                    "terminal": "Terminal 1"
+                }
+                """;
+
+        mockMvc.perform(put("/api/gates/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonPayload))
+                .andExpect(status().isNotFound());
+    }
+
+    /** Verify PUT /api/gates/{id} returns 400 when the JSON payload is malformed. */
+    @Test
+    public void testUpdateGateBadRequest() throws Exception {
+        String badPayload = "{ not valid }";
+
+        mockMvc.perform(put("/api/gates/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(badPayload))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     public void testDeleteGate() throws Exception {
         doNothing().when(gateService).deleteGate(1L);
 
         mockMvc.perform(delete("/api/gates/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    /** Verify DELETE /api/gates/{id} returns 404 when the gate does not exist. */
+    @Test
+    public void testDeleteGateNotFound() throws Exception {
+        doThrow(new ResourceNotFoundException("Gate not found with id: 99"))
+                .when(gateService).deleteGate(99L);
+
+        mockMvc.perform(delete("/api/gates/99"))
+                .andExpect(status().isNotFound());
     }
 }

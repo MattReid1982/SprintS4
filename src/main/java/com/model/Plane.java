@@ -14,7 +14,7 @@ public class Plane {
     /** Primary key for the Plane table. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long ID;
+    private long id;
 
     /** Aircraft type (e.g., "Boeing 737"). */
     private String type;
@@ -73,35 +73,17 @@ public class Plane {
      *
      * @return plane ID
      */
-    public long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
     /**
      * Sets the plane ID.
      *
-     * @param ID plane ID
-     */
-    public void setID(long ID) {
-        this.ID = ID;
-    }
-
-    /**
-     * Alias method for getID matching Java camelCase naming conventions.
-     *
-     * @return plane ID
-     */
-    public Long getId() {
-        return ID;
-    }
-
-    /**
-     * Alias method for setID matching Java camelCase naming conventions.
-     *
      * @param id plane ID
      */
     public void setId(Long id) {
-        this.ID = (id != null) ? id : 0L;
+        this.id = (id != null) ? id : 0L;
     }
 
     /**

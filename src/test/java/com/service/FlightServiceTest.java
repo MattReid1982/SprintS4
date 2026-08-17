@@ -43,7 +43,7 @@ public class FlightServiceTest {
         testArrivalAirport.setId(2L);
 
         testPlane = new Plane();
-        testPlane.setID(1L);
+        testPlane.setId(1L);
         testPlane.setType("Boeing 737");
 
         testFlight = new Flight();
