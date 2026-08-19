@@ -71,6 +71,16 @@ public class BookingService {
         return bookingRepository.findByPassengerId(passengerId);
     }
 
+    @Transactional(readOnly = true)
+    public List<Booking> getManifest(String flightNumber, Long gateId, String status) {
+        List<Booking> list = bookingRepository.findAll();
+        return list.stream()
+                .filter(b -> flightNumber == null || flightNumber.isBlank() || (b.getFlightNumber() != null && b.getFlightNumber().equalsIgnoreCase(flightNumber.trim())))
+                .filter(b -> gateId == null || (b.getGate() != null && b.getGate().getId() != null && b.getGate().getId().equals(gateId)))
+                .filter(b -> status == null || status.isBlank() || (b.getStatus() != null && b.getStatus().equalsIgnoreCase(status.trim())))
+                .toList();
+    }
+
     /**
      * Resolves foreign entities (Passenger, Plane, Airline, Airports, Gate) to managed entities.
      */

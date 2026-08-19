@@ -40,6 +40,17 @@ public class BookingController {
     }
 
     /**
+     * GET /api/bookings/manifest — returns manifest filtered by flight number, gate, and status.
+     */
+    @GetMapping("/manifest")
+    public List<Booking> getManifest(
+            @RequestParam(required = false) String flightNumber,
+            @RequestParam(required = false) Long gateId,
+            @RequestParam(required = false) String status) {
+        return bookingService.getManifest(flightNumber, gateId, status);
+    }
+
+    /**
      * GET /api/bookings/{id} — single booking by ID.
      */
     @GetMapping("/{id}")
